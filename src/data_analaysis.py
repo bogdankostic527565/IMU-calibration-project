@@ -35,9 +35,9 @@ df["magnitude"]=np.sqrt(df["true_measurement_x"]**2+df["true_measurement_y"]**2+
 
 # Moving average smoothing with a window size of 5 samples (i-2, i-1, i, i+1, i+2)
 
-df["x_smoothed"] = df["true_measurement_x"].rolling(window=5, center=True).mean()
-df["y_smoothed"] = df["true_measurement_y"].rolling(window=5, center=True).mean()
-df["z_smoothed"] = df["true_measurement_z"].rolling(window=5, center=True).mean()
+df["x_moving_avg"] = df["true_measurement_x"].rolling(window=5, center=True).mean()
+df["y_moving_avg"] = df["true_measurement_y"].rolling(window=5, center=True).mean()
+df["z_moving_avg"] = df["true_measurement_z"].rolling(window=5, center=True).mean()
 
 # Define a low-pass Butterworth filter
 
@@ -55,14 +55,14 @@ def apply_lowpass(data, cutoff=2.0, fs=50, order=3):
 
 # Apply the low-pass filter to each axis of the accelerometer data and store the results in new columns
 
-df["x_filtered_3order"] = apply_lowpass(df["true_measurement_x"])
+df["x_filtered"] = apply_lowpass(df["true_measurement_x"])
 df["y_filtered"] = apply_lowpass(df["true_measurement_y"])
 df["z_filtered"] = apply_lowpass(df["true_measurement_z"])
 
 # Filter values validation by plotting
 
 plt.plot(df.index, df["true_measurement_x"], label="raw")
-plt.plot(df.index, df["x_filtered_3order"], label="filtered")
+plt.plot(df.index, df["x_filtered"], label="filtered")
 
 plt.legend()
 plt.title("AX raw vs filtered")
